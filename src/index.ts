@@ -101,6 +101,9 @@ async function main(): Promise<void> {
         const { job } = await client.createVideo({ model, prompt, duration, resolution, mode, aspect_ratio, generate_audio, frame_images, input_references });
         if (wait) {
           const final = await client.waitForTask(job.id);
+          if (final.status !== 'completed') {
+            return toolError(`Task ${final.status}: ${final.error_message ?? 'no output'}`);
+          }
           return toolResult(JSON.stringify(final, null, 2));
         }
         return toolResult(JSON.stringify(job, null, 2));
