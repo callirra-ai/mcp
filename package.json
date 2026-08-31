@@ -1,0 +1,34 @@
+﻿{
+    "name":  "@callirra/mcp",
+    "version":  "0.1.0",
+    "description":  "Callirra MCP server for Claude Code, Cursor, Codex and other MCP-compatible AI agents.",
+    "license":  "MIT",
+    "type":  "module",
+    "bin":  {
+                "callirra-mcp":  "./dist/index.js"
+            },
+    "main":  "./dist/index.js",
+    "exports":  {
+                    ".":  "./dist/index.js"
+                },
+    "files":  [
+                  "dist"
+              ],
+    "scripts":  {
+                    "build":  "tsc -p tsconfig.json",
+                    "typecheck":  "tsc -p tsconfig.json --noEmit",
+                    "test":  "node --test --import tsx ./test/*.test.ts"
+                },
+    "engines":  {
+                    "node":  "\u003e=22"
+                },
+    "dependencies":  {
+                         "@modelcontextprotocol/sdk":  "^1.30.0",
+                         "zod":  "^3.24.1"
+                     },
+    "devDependencies":  {
+                            "@types/node":  "22.10.5",
+                            "tsx":  "^4.19.2",
+                            "typescript":  "5.7.2"
+                        }
+}
