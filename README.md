@@ -61,11 +61,12 @@ Use the same `callirra-mcp` command as the MCP server entry and pass `CALLIRRA_A
 | `list_models` | List available image/video models |
 | `get_balance` | Check credits and available balance |
 | `get_usage` | Show recent usage |
-| `generate_image` | Generate an image |
-| `create_video` | Create an async video task |
+| `generate_image` | Generate an image (supports `nsfw_checker`, `google_search`) |
+| `create_video` | Create an async video task (supports v2v refs, seed, modes, `return_last_frame`, NSFW/search toggles) |
+| `list_videos` | List recent video tasks |
 | `get_task` | Get task status |
 | `cancel_task` | Cancel task |
-| `upload_media` | Upload a reference image |
+| `upload_media` | Upload a reference image (base64, ≤6MB) |
 | `list_prompt_templates` | List Prompt Studio templates |
 | `enhance_prompt` | Enhance an idea with a built-in template |
 | `get_creative_knowledge` | Get the full curated creative knowledge base |

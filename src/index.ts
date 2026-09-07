@@ -1,8 +1,21 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
-import { CallirraClient, KEY_PREFIX } from './client.js';
+import { readFileSync } from 'node:fs';
+import { CallirraClient, KEY_PREFIX } from '@callirra/client';
+
+/** Read package.json version at runtime (single place, no drift). */
+function packageVersion(): string {
+  try {
+    // dist/index.js -> ../package.json; src/index.ts -> ../../package.json
+    const candidate = new URL('../package.json', import.meta.url);
+    const pkg = JSON.parse(readFileSync(candidate, 'utf8')) as { version?: string };
+    return pkg.version ?? '0.0.0';
+  } catch {
+    return '0.0.0';
+  }
+}
 
 function toolResult(text: string) {
   return { content: [{ type: 'text' as const, text }] };
@@ -24,7 +37,7 @@ async function main(): Promise<void> {
     apiBase: process.env.CALLIRRA_API_BASE,
   });
 
-  const server = new McpServer({ name: 'callirra-mcp', version: '0.1.0' });
+  const server = new McpServer({ name: 'callirra-mcp', version: packageVersion });
 
   server.tool('list_models', 'List available image and video models', {}, async () => {
     try {
@@ -63,8 +76,10 @@ async function main(): Promise<void> {
       n: z.number().int().positive().max(4).optional(),
       image_input: z.string().url().optional(),
       reference_images: z.array(z.string().url()).max(8).optional(),
+      nsfw_checker: z.boolean().optional(),
+      google_search: z.boolean().optional(),
     },
-    async ({ model, prompt, size, n, image_input, reference_images }) => {
+    async ({ model, prompt, size, n, image_input, reference_images, nsfw_checker, google_search }) => {
       try {
         const result = await client.generateImage({
           model,
@@ -73,6 +88,8 @@ async function main(): Promise<void> {
           n,
           image_input,
           reference_images,
+          nsfw_checker,
+          google_search,
         });
         return toolResult(JSON.stringify(result, null, 2));
       } catch (err) {
@@ -94,11 +111,26 @@ async function main(): Promise<void> {
       generate_audio: z.boolean().optional(),
       frame_images: z.array(z.string().url()).max(8).optional(),
       input_references: z.array(z.string().url()).max(8).optional(),
+      input_images: z.array(z.string().url()).max(9).optional(),
+      input_videos: z.array(z.string().url()).max(1).optional(),
+      audio_input: z.array(z.string().url()).max(3).optional(),
+      seed: z.number().int().optional(),
+      seedance_mode: z.string().optional(),
+      kling_mode: z.string().optional(),
+      minimax_h3_mode: z.string().optional(),
+      camera_fixed: z.boolean().optional(),
+      kling_orientation: z.string().optional(),
+      background_source: z.string().optional(),
+      output_format: z.string().optional(),
+      return_last_frame: z.boolean().optional(),
+      audio_setting: z.string().optional(),
+      nsfw_checker: z.boolean().optional(),
+      google_search: z.boolean().optional(),
       wait: z.boolean().optional(),
     },
-    async ({ model, prompt, duration, resolution, mode, aspect_ratio, generate_audio, frame_images, input_references, wait }) => {
+    async ({ model, prompt, duration, resolution, mode, aspect_ratio, generate_audio, frame_images, input_references, input_images, input_videos, audio_input, seed, seedance_mode, kling_mode, minimax_h3_mode, camera_fixed, kling_orientation, background_source, output_format, return_last_frame, audio_setting, nsfw_checker, google_search, wait }) => {
       try {
-        const { job } = await client.createVideo({ model, prompt, duration, resolution, mode, aspect_ratio, generate_audio, frame_images, input_references });
+        const { job } = await client.createVideo({ model, prompt, duration, resolution, mode, aspect_ratio, generate_audio, frame_images, input_references, input_images, input_videos, audio_input, seed, seedance_mode, kling_mode, minimax_h3_mode, camera_fixed, kling_orientation, background_source, output_format, return_last_frame, audio_setting, nsfw_checker, google_search });
         if (wait) {
           const final = await client.waitForTask(job.id);
           if (final.status !== 'completed') {
@@ -112,6 +144,15 @@ async function main(): Promise<void> {
       }
     },
   );
+
+  server.tool('list_videos', 'List recent video jobs', { limit: z.number().int().positive().max(100).optional() }, async ({ limit }) => {
+    try {
+      const { data } = await client.listVideos(limit ?? 20);
+      return toolResult(JSON.stringify(data, null, 2));
+    } catch (err) {
+      return toolError(err instanceof Error ? err.message : String(err));
+    }
+  });
 
   server.tool('get_task', 'Get a video task status', { id: z.string().min(1) }, async ({ id }) => {
     try {
