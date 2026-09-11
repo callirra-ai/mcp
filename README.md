@@ -7,6 +7,8 @@
 
 MCP server for Callirra — lets Claude Code, Cursor, Codex and other MCP-compatible agents discover models, generate images/videos, use the built-in prompt templates, upload references, poll tasks and check balances.
 
+<img src="images/mcp.png" width="100%" alt="Example MCP configuration for Claude Code, Cursor and Codex, plus the tool surface the agent gets.">
+
 ## Requirements
 
 - Node.js 22+
