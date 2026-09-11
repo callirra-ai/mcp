@@ -1,6 +1,11 @@
 # @callirra/mcp
 
-MCP server for Callirra — lets Claude Code, Cursor, Codex and other MCP-compatible agents discover models, generate images/videos, use Prompt Studio, upload references, poll tasks and check balances.
+[![npm](https://img.shields.io/npm/v/@callirra/mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/@callirra/mcp)
+[![node](https://img.shields.io/badge/node-22%2B-1f9c6b?style=flat-square)](#requirements)
+[![license](https://img.shields.io/badge/license-MIT-555555?style=flat-square)](#license)
+[![MCP](https://img.shields.io/badge/MCP-compatible-8250df?style=flat-square)](https://modelcontextprotocol.io/)
+
+MCP server for Callirra — lets Claude Code, Cursor, Codex and other MCP-compatible agents discover models, generate images/videos, use the built-in prompt templates, upload references, poll tasks and check balances.
 
 ## Requirements
 
@@ -67,7 +72,7 @@ Use the same `callirra-mcp` command as the MCP server entry and pass `CALLIRRA_A
 | `get_task` | Get task status |
 | `cancel_task` | Cancel task |
 | `upload_media` | Upload a reference image (base64, ≤6MB) |
-| `list_prompt_templates` | List Prompt Studio templates |
+| `list_prompt_templates` | List built-in prompt templates |
 | `enhance_prompt` | Enhance an idea with a built-in template |
 | `get_creative_knowledge` | Get the full curated creative knowledge base |
 
@@ -76,6 +81,11 @@ Each tool returns `isError` responses on failures so agents can handle errors gr
 ## License
 
 MIT. Source: [github.com/callirra-ai/mcp](https://github.com/callirra-ai/mcp?utm_source=github-mcp)
+
+## Related
+
+- [GPT Image 2.5 Prompt Atlas](https://github.com/callirra-ai/gpt-image-2-5-prompt-atlas) — 50 prompts, each shipped with the exact frame it produced, plus a measured Flare-vs-Sunburst comparison
+- [CLI](https://github.com/callirra-ai/cli?utm_source=github-mcp) · [Agent skill](https://github.com/callirra-ai/skill?utm_source=github-mcp) — the same catalogue for terminals and skill-enabled agents
 
 ---
 
