@@ -1,52 +1,63 @@
-﻿{
-    "name":  "@callirra/mcp",
-    "version":  "0.1.0",
-    "description":  "Callirra MCP server for Claude Code, Cursor, Codex and other MCP-compatible AI agents.",
-    "license":  "MIT",
-    "type":  "module",
-    "bin":  {
-                "callirra-mcp":  "./dist/index.js"
-            },
-    "main":  "./dist/index.js",
-    "exports":  {
-                    ".":  "./dist/index.js"
-                },
-    "files":  [
-                  "dist"
-              ],
-    "scripts":  {
-                    "build":  "tsc -p tsconfig.json",
-                    "typecheck":  "tsc -p tsconfig.json --noEmit",
-                    "test":  "node --test --import tsx ./test/*.test.ts"
-                },
-    "engines":  {
-                    "node":  "\u003e=22"
-                },
-    "dependencies":  {
-                         "@modelcontextprotocol/sdk":  "^1.30.0",
-                         "zod":  "^3.24.1"
-                     },
-    "devDependencies":  {
-                            "@types/node":  "22.10.5",
-                            "tsx":  "^4.19.2",
-                            "typescript":  "5.7.2"
-                        },
-    "repository":  {
-                       "type":  "git",
-                       "url":  "https://github.com/callirra-ai/mcp.git"
-                   },
-    "homepage":  "https://callirra.com?utm_source=github-mcp",
-    "bugs":  {
-                 "url":  "https://github.com/callirra-ai/mcp/issues"
-             },
-    "keywords":  [
-                     "callirra",
-                     "mcp",
-                     "ai",
-                     "claude-code",
-                     "codex",
-                     "cursor",
-                     "image-generation",
-                     "video-generation"
-                 ]
+{
+  "name": "@callirra/mcp",
+  "version": "0.2.0",
+  "description": "Callirra MCP server: generate images and video from any MCP-compatible agent, browse 172 curated prompt recipes, and use one API key for the newest image and video models.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "callirra-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-data.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --import tsx ./test/*.test.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/callirra-ai/mcp.git"
+  },
+  "homepage": "https://callirra.com?utm_source=github-mcp",
+  "bugs": {
+    "url": "https://github.com/callirra-ai/mcp/issues"
+  },
+  "keywords": [
+    "callirra",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "claude-code",
+    "codex",
+    "cursor",
+    "image-generation",
+    "video-generation",
+    "seedance",
+    "seedance-2-5",
+    "nsfw",
+    "unfiltered",
+    "prompt-library",
+    "prompt-recipes",
+    "gpt-image",
+    "minimax-h3",
+    "text-to-video",
+    "image-to-video"
+  ]
 }
