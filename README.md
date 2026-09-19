@@ -1,4 +1,5 @@
-# @callirra/mcp
+| `get_prompt_recipe` | One recipe in full: the prompt, its settings, the credits, and a deep link |
+| `get_scene_recipe` | The six worked Seedance 2.5 scene recipes, with what a filtered route refuses || `list_prompt_recipes` | Browse the 172-recipe prompt library — filter by category or scene |# @callirra/mcp
 
 [![npm](https://img.shields.io/npm/v/@callirra/mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/@callirra/mcp)
 [![node](https://img.shields.io/badge/node-22%2B-1f9c6b?style=flat-square)](#requirements)
