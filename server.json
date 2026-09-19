@@ -3,7 +3,7 @@
   "name": "io.github.callirra-ai/mcp",
   "title": "Callirra",
   "description": "Generate video and images from any MCP-compatible agent with one API key. Seedance 2.x with an unrestricted channel, GPT Image 2.5 and MiniMax-H3, plus 172 curated prompt recipes with their settings, credits and one-click deep links.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "websiteUrl": "https://callirra.com/api?utm_source=mcp-registry&utm_medium=directory&utm_campaign=mcp_launch",
   "repository": {
     "url": "https://github.com/callirra-ai/mcp",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "@callirra/mcp",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "transport": {
         "type": "stdio"
       }
