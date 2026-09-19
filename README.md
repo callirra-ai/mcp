@@ -69,6 +69,11 @@ Add the MCP server to your Claude Code config with:
 
 Use the same `callirra-mcp` command as the MCP server entry and pass `CALLIRRA_API_KEY` in the environment.
 
+> The prompt library ships with the package: `src/data/prompt-recipes.json` (172 recipes with their
+> settings, credits and deep links) and `src/data/scene-recipes.json` (the six worked Seedance 2.5 scenes).
+> They are generated from Callirra's own library by the monorepo's build, so the recipe commands work offline
+> and need no API key. The browsable version is <https://callirra.com/seedance-prompt-library>.
+
 ## Available tools
 
 | Tool | Purpose |
