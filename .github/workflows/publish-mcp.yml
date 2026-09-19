@@ -1,0 +1,66 @@
+name: Publish to MCP Registry
+
+# Publishes this server's metadata to the official MCP Registry (registry.modelcontextprotocol.io), which
+# several other directories aggregate from. Only the *metadata* is published here: the npm package is released
+# manually, because the account uses 2FA and an OTP cannot be supplied from CI.
+#
+# Authentication is OIDC, so no token or secret is stored anywhere: GitHub issues the workflow a short-lived
+# identity token, and the registry accepts it because this repository's owner matches the server name's
+# namespace (io.github.callirra-ai/*).
+
+on:
+  push:
+    tags: ['v*'] # e.g. v0.2.1
+  workflow_dispatch: # or run it by hand from the Actions tab
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # required for OIDC authentication
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # Guard: server.json must describe a version that actually exists on npm, otherwise the registry rejects
+      # the publish with a confusing error after the binary has already been downloaded.
+      - name: Check server.json against npm
+        run: |
+          set -euo pipefail
+          NAME=$(jq -r '.name' server.json)
+          VERSION=$(jq -r '.version' server.json)
+          PKG=$(jq -r '.packages[0].identifier' server.json)
+          PKG_VERSION=$(jq -r '.packages[0].version' server.json)
+          echo "server: $NAME $VERSION -> $PKG@$PKG_VERSION"
+
+          if [ "$VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::server.json version ($VERSION) and packages[0].version ($PKG_VERSION) differ"
+            exit 1
+          fi
+
+          PUBLISHED=$(npm view "$PKG@$PKG_VERSION" version 2>/dev/null || true)
+          if [ "$PUBLISHED" != "$PKG_VERSION" ]; then
+            echo "::error::$PKG@$PKG_VERSION is not on npm yet"
+            exit 1
+          fi
+
+          # The registry verifies ownership by matching this field against server.json's name.
+          MCP_NAME=$(npm view "$PKG@$PKG_VERSION" mcpName 2>/dev/null || true)
+          if [ "$MCP_NAME" != "$NAME" ]; then
+            echo "::error::mcpName in the published package is '$MCP_NAME', expected '$NAME'"
+            exit 1
+          fi
+          echo "ownership check passed"
+
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher --version || true
+
+      - name: Authenticate to the MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish server metadata
+        run: ./mcp-publisher publish
